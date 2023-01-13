@@ -1,48 +1,30 @@
-#! /usr/bin/env python3
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# In this prototype/example a QTreeView is created. Then it's populated with
-# three containers and all containers are populated with three rows, each 
-# containing three columns.
-# Then the last container is expanded and the last row is selected.
-# The container items are spanned through the all columns.
-# Note: this requires > python-3.2
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import sys, os, pprint, time
-from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QApplication, QTreeView, QAbstractItemView
+import sys
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-app = QApplication(sys.argv)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# init widgets
-view = QTreeView()
-view.setSelectionBehavior(QAbstractItemView.SelectRows)
-model = QStandardItemModel()
-#model.setHorizontalHeaderLabels(['col1', 'col2', 'col3'])
-view.setModel(model)
-view.setUniformRowHeights(True)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# populate data
-for i in range(3):
-    parent1 = QStandardItem('Family {}. Some long status text for sp'.format(i))
-    for j in range(3):
-        child1 = QStandardItem('Child {}'.format(i*3+j))
 
-        parent1.appendRow([child1])
-    model.appendRow(parent1)
-    # span container columns
-    view.setFirstColumnSpanned(i, view.rootIndex(), True)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# expand third container
-index = model.indexFromItem(parent1)
-view.expand(index)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# select last row
-selmod = view.selectionModel()
-index2 = model.indexFromItem(child1)
-selmod.select(index2, QItemSelectionModel.Select|QItemSelectionModel.Rows)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-view.show()
-sys.exit(app.exec_())
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from PyQt5.QtWidgets import QWidget, QTreeView, QHBoxLayout, QApplication
+from main import DictForQTreeView
+
+class MainFrame(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+        tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+        self.tree = QTreeView(self)
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.tree)
+        root_model = QStandardItemModel()
+        self.tree.setModel(root_model)
+        self._populateTree(tree, root_model.invisibleRootItem())
+
+    def _populateTree(self, children, parent):
+        for child in sorted(children):
+            child_item = QStandardItem(child)
+            parent.appendRow(child_item)
+            if isinstance(children, dict):
+                self._populateTree(children[child], child_item)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    main = MainFrame()
+    main.show()
+    sys.exit(app.exec_())

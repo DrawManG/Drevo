@@ -90,7 +90,8 @@ class DictForQTreeView():
         main, sub, subsub = SortingAnArray()
         dict_main = CreatingTheFinalDictionary(dict_main={}, main=main, sub=sub, subsub=subsub)
 
-        print(dict_main)  # TODO PRINT
+
+        return dict_main
 
     def CreatingTheFinalDictionary(dict_main, main, sub, subsub):
         sub_main = CreatingADictionaryForTheFinalDictionary(sub, subsub)
@@ -107,4 +108,4 @@ class DictForQTreeView():
         return submain
 
 
-DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+#DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
