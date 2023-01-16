@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtGui import *
 import sys
 
@@ -21,8 +23,10 @@ class finder(QTextLine):
 class TreeView(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
-        self.tree = QTreeView(self)
+        self.tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+        local_tree = self.tree
+        self.treeView = QTreeView(self)
+        self.treeView.doubleClicked.connect(lambda: self._on_double_clicked(self.treeView.rootIndex().flags()))
         layout = QHBoxLayout(self)
         layout2 = QHBoxLayout(self)
 
@@ -78,10 +82,10 @@ class TreeView(QWidget):
         self.line.resize(200, 32)
         #self.nameLabel.move(20, 20)
         self.line.returnPressed.connect(self.onChanged)
-        completer = QCompleter(tree)
+        completer = QCompleter(local_tree)
         self.line.setCompleter(completer)
 
-        layout4.addWidget(self.tree)
+        layout4.addWidget(self.treeView)
 
         layout4.addLayout(layout4)
         layout.addLayout(layout4)
@@ -90,13 +94,31 @@ class TreeView(QWidget):
 
         layout.addLayout(layout)
         root_model = QStandardItemModel()
-        self.tree.setModel(root_model)
-        self._populateTree(tree, root_model.invisibleRootItem())
+        self.treeView.setModel(root_model)
+        self._populateTree(self.tree, root_model.invisibleRootItem())
 
     def onChanged(self):
         # TODO press enter
-        print("222")
+        a = self.tree
+        find = self.line.text()
+        self.tree = {key: val for key, val in a.items() if find in key}
+        root_model = QStandardItemModel()
+        self.treeView.setModel(root_model)
+        self._populateTree(self.tree, root_model.invisibleRootItem())
+        self.tree = a
 
+
+    def _on_double_clicked(self, index):
+        #TODO tree view
+        self.return_data()
+        print(self.treeView.currentIndex().column())
+        print()
+    def return_data(self):
+
+            index = self.treeView.selectedIndexes()[0]
+
+            selected_name = index.model().itemFromIndex(index).text()
+            print(self.treeView.model().index(self.treeView.currentIndex().row()),0)
     def _populateTree(self, children, parent):
         for child in sorted(children):
             child_item = QStandardItem(child)
