@@ -1,124 +1,127 @@
-import os
-
-from PyQt5.QtGui import *
 import sys
 
-
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QWidget, QTreeView, QHBoxLayout, QApplication, QLabel, QLineEdit, QVBoxLayout, QCompleter, \
     QPushButton
-from PyQt5.uic.properties import QtGui
 
 from main import DictForQTreeView
 
-class finder(QTextLine):
-    def join(self):
-
-        self.nameLabel = QLabel(self)
-        self.nameLabel.setText('Name:')
-        self.line = QLineEdit(self)
-
-        self.line.move(80, 20)
-        self.line.resize(200, 32)
-        self.nameLabel.move(20, 20)
+"""
+line2 - txt_object
+line3 - txt_model
+line4 - txt_date
+"""
 class TreeView(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
-        local_tree = self.tree
+        backup_treeview_data = self.tree
         self.treeView = QTreeView(self)
-        self.treeView.doubleClicked.connect(lambda: self._on_double_clicked(self.treeView.rootIndex().flags()))
-        layout = QHBoxLayout(self)
-        layout2 = QHBoxLayout(self)
+        self.treeView.clicked.connect(self.Item_click)
+        layout_main = QHBoxLayout(self)
 
-        self.nameLabel = QLabel(self)
-        self.nameLabel.setText('Search:')
-        self.line = QLineEdit(self)
 
-        layout3 = QVBoxLayout(self)
-        layout4 = QVBoxLayout(self)
-        layout5 = QHBoxLayout(self)
-        layout6 = QHBoxLayout(self)
+        self.label_search = QLabel(self)
+        self.label_search.setText('Search:')
+        self.txtbox_search = QLineEdit(self)
 
-        self.nameLabel2 = QLabel(self)
-        self.nameLabel2.setText('Object:')
+        layout_main_right = QVBoxLayout(self)
+        layout_main_left = QVBoxLayout(self)
+        layout_main_left_search = QVBoxLayout(self)
+        layout_main_right_buttons = QHBoxLayout(self)
+
+        self.label_object = QLabel(self)
+        self.label_object.setText('Object:')
         self.line2 = QLineEdit(self)
 
-        self.but = QPushButton(self)
-        self.but.setText("Cancel")
-        self.but2 = QPushButton(self)
-        self.but2.setText("OK")
+        self.Btn_cancel = QPushButton(self)
+        self.Btn_cancel.setText("Cancel")
+        self.btn_OK = QPushButton(self)
+        self.btn_OK.setText("OK")
 
-        layout6.addWidget(self.but)
-        layout6.addWidget(self.but2)
+        layout_main_right_buttons.addWidget(self.Btn_cancel)
+        layout_main_right_buttons.addWidget(self.btn_OK)
 
-        self.nameLabel3 = QLabel(self)
-        self.nameLabel3.setText('Model:')
+        self.label_model = QLabel(self)
+        self.label_model.setText('Model:')
         self.line3 = QLineEdit(self)
 
-        self.nameLabel4 = QLabel(self)
-        self.nameLabel4.setText('Date:')
+        self.label_date = QLabel(self)
+        self.label_date.setText('Date:')
         self.line4 = QLineEdit(self)
 
-        layout3.addWidget(self.nameLabel2)
-        layout3.addWidget(self.line2)
-        layout3.addWidget(self.nameLabel3)
-        layout3.addWidget(self.line3)
-        layout3.addWidget(self.nameLabel4)
-        layout3.addWidget(self.line4)
+        layout_main_right.addWidget(self.label_object)
+        layout_main_right.addWidget(self.line2)
+        layout_main_right.addWidget(self.label_model)
+        layout_main_right.addWidget(self.line3)
+        layout_main_right.addWidget(self.label_date)
+        layout_main_right.addWidget(self.line4)
 
 
 
 
-        layout5.addWidget(self.nameLabel)
-        layout5.addWidget(self.line)
+        layout_main_left_search.addWidget(self.label_search)
+        layout_main_left_search.addWidget(self.txtbox_search)
 
-        layout4.addLayout(layout5)
-        layout4.addLayout(layout2)
-
-        layout3.addLayout(layout6)
+        layout_main_left.addLayout(layout_main_left_search)
 
 
+        layout_main_right.addLayout(layout_main_right_buttons)
 
-        self.line.resize(200, 32)
+
+
+        self.txtbox_search.resize(200, 32)
         #self.nameLabel.move(20, 20)
-        self.line.returnPressed.connect(self.onChanged)
-        completer = QCompleter(local_tree)
-        self.line.setCompleter(completer)
 
-        layout4.addWidget(self.treeView)
+        self.txtbox_search.textChanged.connect(self.onChanged)
+        completer = QCompleter(backup_treeview_data)
+        self.txtbox_search.setCompleter(completer)
 
-        layout4.addLayout(layout4)
-        layout.addLayout(layout4)
-        layout.addLayout(layout3)
+        layout_main_left.addWidget(self.treeView)
+
+        layout_main_left.addLayout(layout_main_left)
+        layout_main.addLayout(layout_main_left)
+        layout_main.addLayout(layout_main_right)
 
 
-        layout.addLayout(layout)
+        layout_main.addLayout(layout_main)
         root_model = QStandardItemModel()
         self.treeView.setModel(root_model)
         self._populateTree(self.tree, root_model.invisibleRootItem())
 
     def onChanged(self):
         # TODO press enter
-        a = self.tree
-        find = self.line.text()
-        self.tree = {key: val for key, val in a.items() if find in key}
+        _backup = self.tree
+        find = self.txtbox_search.text()
+        self.tree = {key: val for key, val in _backup.items() if find in key}
         root_model = QStandardItemModel()
         self.treeView.setModel(root_model)
         self._populateTree(self.tree, root_model.invisibleRootItem())
-        self.tree = a
+        self.tree = _backup
 
 
-    def _on_double_clicked(self, index):
-        #TODO tree view
-        self.return_data()
-        print(self.treeView.currentIndex().column())
-        print()
-    def return_data(self):
+    def Item_click(self,*args):
+        for index in self.treeView.selectedIndexes():
+            data = "/" + index.data()
+            while index.parent().isValid():
+                index = index.parent()
+                data = "/" + index.data() + data
+            data=data.split("/")
+            del data[0]
+            self.line2.setText("")
+            self.line3.setText("")
+            self.line4.setText("")
+            if len(data) <= 3:
 
-            index = self.treeView.selectedIndexes()[0]
+                for i in range(len(data)):
 
-            selected_name = index.model().itemFromIndex(index).text()
-            print(self.treeView.model().index(self.treeView.currentIndex().row()),0)
+                    code = """self.line{NUMB}.setText(data[{INDEX}])"""
+                    code = code.replace("{NUMB}",str(i+2))
+                    code = code.replace("{INDEX}",str(i))
+
+                    exec(code)
+
+
     def _populateTree(self, children, parent):
         for child in sorted(children):
             child_item = QStandardItem(child)
