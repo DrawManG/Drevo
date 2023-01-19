@@ -16,6 +16,7 @@ class DictForQTreeView():
         return LVLmain
 
     def BuildingAnArraySkeleton():
+
         Dir_1lvl_main = TakeSubfolders(DirPath)
         Dir_2lvl_sub = []
         Dir_3lvl_subsub = []
@@ -89,7 +90,6 @@ class DictForQTreeView():
     def CreatingADictionaryBasedOnSkeletonSorting():
         main, sub, subsub = SortingAnArray()
         dict_main = CreatingTheFinalDictionary(dict_main={}, main=main, sub=sub, subsub=subsub)
-
 
         return dict_main
 
