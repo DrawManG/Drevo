@@ -3,8 +3,12 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QWidget, QTreeView, QHBoxLayout, QApplication, QLabel, QLineEdit, QVBoxLayout, QCompleter, \
     QPushButton
+import os
+import platform
+import subprocess
 
 from main import DictForQTreeView
+
 
 """
 line2 - txt_object
@@ -20,8 +24,9 @@ class TreeView(QWidget):
         layout_main_left = QVBoxLayout(self)
         layout_main_left_search = QVBoxLayout(self)
         layout_main_right_buttons = QHBoxLayout(self)
-
+        self.root_path = DictForQTreeView.pather()
         self.tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+
         backup_treeview_data = self.tree
 
         self.treeView = QTreeView(self)
@@ -30,29 +35,32 @@ class TreeView(QWidget):
         self.label_search = QLabel(self)
         self.label_search.setText('Search:')
         self.txtbox_search = QLineEdit(self)
-        self.txtbox_search.resize(200, 32)
         self.txtbox_search.textChanged.connect(self.onChanged)
         self.txtbox_search.setCompleter(QCompleter(backup_treeview_data))
 
         self.label_object = QLabel(self)
         self.label_object.setText('Object:')
         self.line2 = QLineEdit(self)
+        self.line2.setReadOnly(True)
 
-        self.Btn_cancel = QPushButton(self)
-        self.Btn_cancel.setText("Cancel")
-        self.btn_OK = QPushButton(self)
-        self.btn_OK.setText("OK")
+        self.Btn_Open = QPushButton(self)
+        self.Btn_Open.setText("Open")
+        self.Btn_Open.clicked.connect(self.open_btn)
+        #self.btn_OK = QPushButton(self)
+        #self.btn_OK.setText("OK")
 
-        layout_main_right_buttons.addWidget(self.Btn_cancel)
-        layout_main_right_buttons.addWidget(self.btn_OK)
+        layout_main_right_buttons.addWidget(self.Btn_Open)
+        #layout_main_right_buttons.addWidget(self.btn_OK)
 
         self.label_model = QLabel(self)
         self.label_model.setText('Model:')
         self.line3 = QLineEdit(self)
+        self.line3.setReadOnly(True)
 
         self.label_date = QLabel(self)
         self.label_date.setText('Date:')
         self.line4 = QLineEdit(self)
+        self.line4.setReadOnly(True)
 
         layout_main.addLayout(layout_main_left)
         layout_main.addLayout(layout_main_right)
@@ -76,10 +84,24 @@ class TreeView(QWidget):
         self.treeView.setModel(self.root_model)
         self._populateTree(self.tree, self.root_model.invisibleRootItem())
 
+    def open_btn(self):
+
+
+        if len(self.line2.text()) > 0 and len(self.line3.text()) > 0 and len(self.line4.text()) > 0 :
+            self.root_path = DictForQTreeView.pather()
+            path = str(self.root_path+self.line2.text()+"/"+self.line3.text()+"/"+self.line4.text())
+            if platform.system() == "Windows":
+                os.startfile(path)
+            elif platform.system() == "Darwin":
+                subprocess.Popen(["open", path])
+            else:
+                subprocess.Popen(["xdg-open", path])
+
+
     def onChanged(self):
 
         _backup = self.tree
-
+        self.root_model = QStandardItemModel()
         self.tree = {key: val for key, val in _backup.items() if self.txtbox_search.text() in key}
         self.treeView.setModel(self.root_model)
         self._populateTree(self.tree, self.root_model.invisibleRootItem())
@@ -127,5 +149,6 @@ class TreeView(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = TreeView()
+    main.resize(750,300)
     main.show()
     sys.exit(app.exec_())

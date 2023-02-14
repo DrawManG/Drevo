@@ -4,11 +4,14 @@ from sys import platform
 
 class DictForQTreeView():
     global DirPath, TakeSubfolders, BuildingAnArraySkeleton, SortingAnArray, Sorting_1lvl_main, Sorting_2lvl_Sub, Sorting_3lvl_SubSub, CreatingTheFinalDictionary, CreatingADictionaryForTheFinalDictionary
+    def pather():
+        if platform == "linux" or platform == "linux2":
+            DirPath = "/home/drawmang/disk-z/DigitRock Models Backup"
+        elif platform == "win32":
+            DirPath = "Z:\\DigitRock Models Backup"
+        return DirPath
 
-    if platform == "linux" or platform == "linux2":
-        DirPath = "/home/drawmang/disk-z/DigitRock Models Backup"
-    elif platform == "win32":
-        DirPath = "Z:\\DigitRock Models Backup"
+    DirPath = pather()
 
     def TakeSubfolders(folder_path) -> list:
         LVLmain = [f.path for f in os.scandir(folder_path) if f.is_dir()]
@@ -93,7 +96,7 @@ class DictForQTreeView():
 
         return dict_main
 
-    def CreatingTheFinalDictionary(dict_main, main, sub, subsub):
+    def CreatingTheFinalDictionary(dict_main, main, sub, subsub,):
         sub_main = CreatingADictionaryForTheFinalDictionary(sub, subsub)
         dict_main = dict.fromkeys(main, sub_main)
 
