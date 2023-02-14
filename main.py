@@ -6,9 +6,9 @@ class DictForQTreeView():
     global DirPath, TakeSubfolders, BuildingAnArraySkeleton, SortingAnArray, Sorting_1lvl_main, Sorting_2lvl_Sub, Sorting_3lvl_SubSub, CreatingTheFinalDictionary, CreatingADictionaryForTheFinalDictionary
     def pather():
         if platform == "linux" or platform == "linux2":
-            DirPath = "/home/drawmang/disk-z/DigitRock Models Backup"
+            DirPath = "/home/drawmang/disk-z/DigitRock Models Backup/"
         elif platform == "win32":
-            DirPath = "Z:\\DigitRock Models Backup"
+            DirPath = "Z:\\DigitRock Models Backup\\"
         return DirPath
 
     DirPath = pather()

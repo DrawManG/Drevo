@@ -90,8 +90,12 @@ class TreeView(QWidget):
         if len(self.line2.text()) > 0 and len(self.line3.text()) > 0 and len(self.line4.text()) > 0 :
             self.root_path = DictForQTreeView.pather()
             path = str(self.root_path+self.line2.text()+"/"+self.line3.text()+"/"+self.line4.text())
+            print(path)
             if platform.system() == "Windows":
-                os.startfile(path)
+                if self.line2.text() and self.line3.text() and self.line4.text():
+                    path = os.path.join(DictForQTreeView.pather(), self.line2.text(), self.line3.text(),
+                                        self.line4.text())
+                    os.startfile(path)
             elif platform.system() == "Darwin":
                 subprocess.Popen(["open", path])
             else:
