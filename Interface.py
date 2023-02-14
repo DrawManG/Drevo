@@ -18,7 +18,7 @@ line4 - txt_date
 class TreeView(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-
+        print(DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting())
         layout_main = QHBoxLayout(self)
         layout_main_right = QVBoxLayout(self)
         layout_main_left = QVBoxLayout(self)
@@ -91,6 +91,7 @@ class TreeView(QWidget):
             self.root_path = DictForQTreeView.pather()
             path = str(self.root_path+self.line2.text()+"/"+self.line3.text()+"/"+self.line4.text())
             print(path)
+
             if platform.system() == "Windows":
                 if self.line2.text() and self.line3.text() and self.line4.text():
                     path = os.path.join(DictForQTreeView.pather(), self.line2.text(), self.line3.text(),

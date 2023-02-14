@@ -14,6 +14,8 @@ class DictForQTreeView():
     DirPath = pather()
 
     def TakeSubfolders(folder_path) -> list:
+
+
         LVLmain = [f.path for f in os.scandir(folder_path) if f.is_dir()]
 
         return LVLmain
@@ -25,7 +27,8 @@ class DictForQTreeView():
         Dir_3lvl_subsub = []
 
         for i in range(len(Dir_1lvl_main)):
-            Dir_2lvl_sub.append(TakeSubfolders(Dir_1lvl_main[i]))
+            Dir_2lvl_sub.append(TakeSubfolders(Dir_1lvl_main[0]))
+
 
             for i2 in range(len(Dir_2lvl_sub[i])):
                 Dir_3lvl_subsub.append(TakeSubfolders(Dir_2lvl_sub[i][i2]))
@@ -93,7 +96,7 @@ class DictForQTreeView():
     def CreatingADictionaryBasedOnSkeletonSorting():
         main, sub, subsub = SortingAnArray()
         dict_main = CreatingTheFinalDictionary(dict_main={}, main=main, sub=sub, subsub=subsub)
-
+        print(dict_main)
         return dict_main
 
     def CreatingTheFinalDictionary(dict_main, main, sub, subsub,):
@@ -111,4 +114,4 @@ class DictForQTreeView():
         return submain
 
 
-#DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
