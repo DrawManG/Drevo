@@ -49,32 +49,88 @@ class type_2():
         type_2.list_files(DirPath)
 
     def list_files(startpath):
-        import os
-        base = []
-        lvl3 = {}
-        os.chdir(startpath)
-        for root, dirs, files in os.walk(".", topdown=False):
-            for name in files:
-                #print(os.path.join(root, name))
-                pass
-            for name in dirs:
-                base.append(os.path.join(root, name))
-        for i in range(len(base)):
+        #------ lvl1 ------
+        from glob import glob
+        lvl1 = []
+        lvl2 = []
+        lvl3 = []
+        param4 = [] #2+3 lvl
+        param5 = [] #1+4 lvl finall
 
-            now_data = base[i]
-            now_del = now_data.count('/')
-            #if now_del == 1:
-            #    print(base[i])
-            #if now_del == 2:
-            #    print(base[i])
-            if now_del == 3:
-                real_base = base[i].replace("./","")
-                try:
-                    lvl3[real_base.split("/")[0]] += "/"+ real_base.split("/")[1]
+        _PATH_lvl1 = []
+        _PATH_lvl2 = []
+        _PATH_lvl3 = []
 
-                except:
-                    lvl3[real_base.split("/")[0]] = real_base.split("/")[1]
-        print(lvl3)
+        temp_lvl2 = []
+        temp_lvl3 = []
+        temp_lvl3_nm = []
+        temp_lvl3_str = []
+
+
+        _PATH_lvl1 = [ f.path for f in os.scandir(startpath) if f.is_dir() ]
+        for temp in range(len(_PATH_lvl1)):
+            if platform == "linux" or platform == "linux2":
+                lvl1.append(str(_PATH_lvl1[temp]).split("/")[-1])
+            elif platform == "win32":
+                lvl1.append(str(_PATH_lvl1[temp]).split("\\")[-1])
+
+        #---- lvl2 ----
+
+        for temp in range(len(_PATH_lvl1)):
+            _PATH_lvl2.append([ f.path for f in os.scandir(_PATH_lvl1[temp]) if f.is_dir()])
+
+            if platform == "linux" or platform == "linux2":
+                for temp2 in range(len(_PATH_lvl1[temp][temp])):
+
+                    temp_lvl2 = []
+                    for i in range(len(_PATH_lvl2[temp])):
+                        temp_lvl2.append(str(_PATH_lvl2[temp][i]).split("/")[-1])
+                    lvl2.append(temp_lvl2)
+
+
+            elif platform == "win32":
+                for temp2 in range(len(_PATH_lvl1[temp][temp])):
+
+                    temp_lvl2 = []
+                    for i in range(len(_PATH_lvl2[temp])):
+                        temp_lvl2.append(str(_PATH_lvl2[temp][i]).split("\\")[-1])
+                    lvl2.append(temp_lvl2)
+
+        # ----- lvl3 ------
+        for temp in range(len(_PATH_lvl2)):
+            temp_lvl3 = []
+
+            for temp2 in range(len(_PATH_lvl2[temp])):
+
+                temp_lvl3.append([ f.path for f in os.scandir(_PATH_lvl2[temp][temp2]) if f.is_dir() ])
+
+                #print(temp_lvl3[temp][temp2])
+
+
+            _PATH_lvl3.append(temp_lvl3)
+
+
+            #print(temp_lvl3)
+
+
+        #print(len(temp_lvl3))
+        #print(len(temp_lvl3[0]))
+        for temp in range(len(_PATH_lvl3)):
+            a = _PATH_lvl3[temp]
+            temp_lvl3 = []
+            for temp2 in range(len(_PATH_lvl3[temp])):
+                #print(a[temp2])
+                for temp3 in range(len(_PATH_lvl3[temp][temp2])):
+
+                        temp_lvl3.append(str(a[temp2][temp3]).split("/")[-1])
+            lvl3.append(temp_lvl3)
+        
+
+
+
+
+
+
 
 
 
