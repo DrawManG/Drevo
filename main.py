@@ -7,7 +7,7 @@ from sys import platform
 class type_2():
     def pather():
         if platform == "linux" or platform == "linux2":
-            DirPath = "/home/drawmang/disk-z/DigitRock Models Backup/"
+            DirPath = "/home/drawmang/Desktop/DigitRock Models Backup/"
         elif platform == "win32":
             DirPath = "Z:\\DigitRock Models Backup\\"
         return DirPath
@@ -48,14 +48,27 @@ class type_2():
 
         type_2.list_files(DirPath)
 
+    def CreatingTheFinalDictionary(dict_main, main, sub, subsub,):
+        sub_main = type_2.CreatingADictionaryForTheFinalDictionary(sub, subsub)
+        dict_main = dict.fromkeys(main, sub_main)
+
+        return dict_main
+
+    def CreatingADictionaryForTheFinalDictionary(sub, subsub):
+        submain = {}
+        for i in range(len(sub)):
+            for i2 in range(len(sub[i])):
+                submain[str(sub[i][i2])] = subsub[i2]
+
+        return submain
     def list_files(startpath):
         #------ lvl1 ------
         from glob import glob
         lvl1 = []
         lvl2 = []
         lvl3 = []
-        param4 = [] #2+3 lvl
-        param5 = [] #1+4 lvl finall
+        param4 = {} #2+3 lvl
+        param5 = {} #1+4 lvl finall
 
         _PATH_lvl1 = []
         _PATH_lvl2 = []
@@ -65,6 +78,9 @@ class type_2():
         temp_lvl3 = []
         temp_lvl3_nm = []
         temp_lvl3_str = []
+
+        temp_param4 = {}
+        temp_param5 = {}
 
 
         _PATH_lvl1 = [ f.path for f in os.scandir(startpath) if f.is_dir() ]
@@ -125,6 +141,29 @@ class type_2():
                         temp_lvl3.append(str(a[temp2][temp3]).split("/")[-1])
             lvl3.append(temp_lvl3)
         
+
+
+        # --- param4 ---
+        for LVL_2 in range(len(lvl2)):
+            for LVL_2_2 in range(len(lvl2[LVL_2])):
+                for LVL_3 in range(len(lvl3)):
+                    temp_param4[lvl2[LVL_2][LVL_2_2]]= lvl3[LVL_3]
+        param4 = temp_param4
+
+        # --- param5 ---
+
+        temp_param5 = {key: value for key, value in zip(lvl1, param4.items())}
+
+
+                    #print(lvl2[LVL_2][LVL_2_2])
+                    #print(temp_param4.values())
+
+
+        print(param4)
+        param5 = temp_param5
+        print("base",param5)
+        return param5
+
 
 
 
@@ -237,6 +276,9 @@ class DictForQTreeView():
 
     def CreatingADictionaryBasedOnSkeletonSorting():
         main, sub, subsub = SortingAnArray()
+        print("1",main)
+        print("2",sub)
+        print("3",subsub)
         dict_main = CreatingTheFinalDictionary(dict_main={}, main=main, sub=sub, subsub=subsub)
         print(dict_main)
         return dict_main
@@ -256,4 +298,4 @@ class DictForQTreeView():
         return submain
 
 
-#DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()

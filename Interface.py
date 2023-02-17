@@ -7,7 +7,7 @@ import os
 import platform
 import subprocess
 
-from main import DictForQTreeView
+from main import DictForQTreeView,type_2
 
 
 """
@@ -24,7 +24,7 @@ class TreeView(QWidget):
         layout_main_left_search = QVBoxLayout(self)
         layout_main_right_buttons = QHBoxLayout(self)
         self.root_path = DictForQTreeView.pather()
-        self.tree = DictForQTreeView.CreatingADictionaryBasedOnSkeletonSorting()
+        self.tree = type_2.list_files(startpath=type_2.pather())
 
         backup_treeview_data = self.tree
 
@@ -142,12 +142,13 @@ class TreeView(QWidget):
 
         for child in sorted(children):
 
+
             child_item = QStandardItem(child)
             parent.appendRow(child_item)
 
             if isinstance(children, dict):
 
-                self._populateTree(children[child], child_item)
+                self._populateTree(children[child][1], child_item)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
