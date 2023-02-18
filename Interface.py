@@ -2,13 +2,18 @@ import sys
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QWidget, QTreeView, QHBoxLayout, QApplication, QLabel, QLineEdit, QVBoxLayout, QCompleter, \
-    QPushButton
+    QPushButton, QGridLayout, QFileSystemModel
 import os
 import platform
 import subprocess
 
-from main import DictForQTreeView,type_2
+from PyQt5.uic.properties import QtCore
 
+from main import DictForQTreeView,type_2
+from PyQt5 import QtCore, QtGui
+
+from PyQt5.QtWidgets import QWidget, QApplication, QFileSystemModel, QTreeView, QLabel, QLineEdit, QGridLayout, \
+    QVBoxLayout
 
 """
 line2 - txt_object
@@ -16,6 +21,9 @@ line3 - txt_model
 line4 - txt_date
 """
 class TreeView(QWidget):
+
+
+
     def __init__(self):
         QWidget.__init__(self)
         layout_main = QHBoxLayout(self)
@@ -24,18 +32,49 @@ class TreeView(QWidget):
         layout_main_left_search = QVBoxLayout(self)
         layout_main_right_buttons = QHBoxLayout(self)
         self.root_path = DictForQTreeView.pather()
-        self.tree = type_2.list_files(startpath=type_2.pather())
+        self.pathRoot = r'C:\Users\DHOUSE\Desktop\New folder'
 
-        backup_treeview_data = self.tree
+        self.model = QFileSystemModel(self)
+
+        self.model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.NoDotAndDotDot)
+        self.model.setRootPath(self.pathRoot)
+
+        self.indexRoot = self.model.index(self.model.rootPath())
 
         self.treeView = QTreeView(self)
-        self.treeView.clicked.connect(self.Item_click)
+        self.treeView.setModel(self.model)
+        self.treeView.setRootIndex(self.indexRoot)
+
+
+        self.labelFileName = QLabel(self)
+        self.labelFileName.setText("File Name:")
+
+        self.lineEditFileName = QLineEdit(self)
+
+        self.labelFilePath = QLabel(self)
+        self.labelFilePath.setText("File Path:")
+
+        self.lineEditFilePath = QLineEdit(self)
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.addWidget(self.labelFileName, 0, 0)
+        self.gridLayout.addWidget(self.lineEditFileName, 0, 1)
+        self.gridLayout.addWidget(self.labelFilePath, 1, 0)
+        self.gridLayout.addWidget(self.lineEditFilePath, 1, 1)
+
+        self.layout = QVBoxLayout(self)
+        self.layout.addLayout(self.gridLayout)
+        self.layout.addWidget(self.treeView)
+
+
+
+
 
         self.label_search = QLabel(self)
         self.label_search.setText('Search:')
         self.txtbox_search = QLineEdit(self)
         self.txtbox_search.textChanged.connect(self.onChanged)
-        self.txtbox_search.setCompleter(QCompleter(backup_treeview_data))
+
 
         self.label_object = QLabel(self)
         self.label_object.setText('Object:')
@@ -81,7 +120,7 @@ class TreeView(QWidget):
 
         self.root_model = QStandardItemModel()
         self.treeView.setModel(self.root_model)
-        self._populateTree(self.tree, self.root_model.invisibleRootItem())
+
 
     def open_btn(self):
 
@@ -138,19 +177,11 @@ class TreeView(QWidget):
                     exec(code)
 
 
-    def _populateTree(self, children, parent):
 
-        for child in sorted(children):
-
-
-            child_item = QStandardItem(child)
-            parent.appendRow(child_item)
-
-            if isinstance(children, dict):
-
-                self._populateTree(children[child][1], child_item)
 
 if __name__ == "__main__":
+
+
     app = QApplication(sys.argv)
     main = TreeView()
     main.resize(750,300)

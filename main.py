@@ -9,7 +9,7 @@ class type_2():
         if platform == "linux" or platform == "linux2":
             DirPath = "/home/drawmang/Desktop/DigitRock Models Backup/"
         elif platform == "win32":
-            DirPath = "Z:\\DigitRock Models Backup\\"
+            DirPath = "C:\\Users\\DHOUSE\\Desktop\\New folder\\"
         return DirPath
     DirPath = pather()
 
@@ -137,11 +137,14 @@ class type_2():
             for temp2 in range(len(_PATH_lvl3[temp])):
                 #print(a[temp2])
                 for temp3 in range(len(_PATH_lvl3[temp][temp2])):
-
+                    if platform == "linux" or platform == "linux2":
                         temp_lvl3.append(str(a[temp2][temp3]).split("/")[-1])
+                    elif platform == "win32":
+                        temp_lvl3.append(str(a[temp2][temp3]).split("\\")[-1])
             lvl3.append(temp_lvl3)
-        
 
+        #if platform == "linux" or platform == "linux2":
+        #elif platform == "win32":
 
         # --- param4 ---
         for LVL_2 in range(len(lvl2)):
@@ -189,7 +192,7 @@ class DictForQTreeView():
         if platform == "linux" or platform == "linux2":
             DirPath = "/home/drawmang/disk-z/DigitRock Models Backup/"
         elif platform == "win32":
-            DirPath = "Z:\\DigitRock Models Backup\\"
+            DirPath = "C:\\Users\\DHOUSE\\Desktop\\New folder\\"
         return DirPath
 
     DirPath = pather()
