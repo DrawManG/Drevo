@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QFileSystemModel, QTreeView, 
 class MyWindow(QWidget):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
-        self.dir = r'C:/Users/DHOUSE/Desktop/New folder/'
+        self.dir = r'Z://DigitRock Models Backup/'
         self.pathRoot = self.dir
 
         self.interface()
@@ -38,18 +38,18 @@ class MyWindow(QWidget):
         self.treeView.setRootIndex(self.indexRoot)
         self.treeView.clicked.connect(self.on_treeView_clicked)
 
-        #self.treeView.hideColumn(1)
-        #self.treeView.hideColumn(2)
-        #self.treeView.hideColumn(3)
+        self.treeView.hideColumn(1)
+        self.treeView.hideColumn(2)
+        self.treeView.hideColumn(3)
         self.treeView.setSortingEnabled(True)
 
-        self.labelFileName = QLabel(self)
-        self.labelFileName.setText("File Name:")
+        #self.labelFileName = QLabel(self)
+        #self.labelFileName.setText("File Name:")
 
-        self.lineEditFileName = QLineEdit(self)
+        #self.lineEditFileName = QLineEdit(self)
 
-        self.labelFilePath = QLabel(self)
-        self.labelFilePath.setText("File Path:")
+        #self.labelFilePath = QLabel(self)
+        #self.labelFilePath.setText("File Path:")
 
 
         self.label_object = QLabel(self)
@@ -79,29 +79,34 @@ class MyWindow(QWidget):
 
 
 
-        self.lineEditFilePath = QLineEdit(self)
+        #self.lineEditFilePath = QLineEdit(self)
 
         self.gridLayout = QGridLayout()
-        self.gridLayout.addWidget(self.labelFileName, 0, 0)
-        self.gridLayout.addWidget(self.lineEditFileName, 0, 1)
-        self.gridLayout.addWidget(self.labelFilePath, 1, 0)
-        self.gridLayout.addWidget(self.lineEditFilePath, 1, 1)
+        #self.gridLayout.addWidget(self.labelFileName, 0, 0)
+        #self.gridLayout.addWidget(self.lineEditFileName, 0, 1)
+        #self.gridLayout.addWidget(self.labelFilePath, 1, 0)
+        #self.gridLayout.addWidget(self.lineEditFilePath, 1, 1)
         self.gridLayout.addWidget(self.label_search, 2, 0)
         self.gridLayout.addWidget(self.txt_search, 2, 1)
 
 
         self.gridLayout2 = QGridLayout()
         self.gridLayout2.addWidget(self.treeView,0,0)
-        self.gridLayout2.addWidget(self.Btn_Open,1,0)
+
+        self.gridLayout3 = QGridLayout()
+        self.gridLayout3.addWidget(self.label_object, 0, 2)
+        self.gridLayout3.addWidget(self.line2, 0, 3)
+        self.gridLayout3.addWidget(self.label_model, 1, 2)
+        self.gridLayout3.addWidget(self.line3, 1, 3)
+        self.gridLayout3.addWidget(self.label_date, 2, 2)
+        self.gridLayout3.addWidget(self.line4, 2, 3)
+
+        self.gridLayout3.addWidget(self.Btn_Open,4,3)
+
+        self.gridLayout2.addLayout(self.gridLayout3,0,1)
 
 
 
-        self.gridLayout.addWidget(self.label_object, 0, 2)
-        self.gridLayout.addWidget(self.line2, 0, 3)
-        self.gridLayout.addWidget(self.label_model, 1, 2)
-        self.gridLayout.addWidget(self.line3, 1, 3)
-        self.gridLayout.addWidget(self.label_date, 2, 2)
-        self.gridLayout.addWidget(self.line4, 2, 3)
         self.root_folder = [f.path for f in os.scandir(self.dir) if f.is_dir()]
 
         self.layout_left = QVBoxLayout(self)
@@ -181,8 +186,8 @@ class MyWindow(QWidget):
                 self.pathRoot = self.dir + finders[0]
                 print(self.dir + finders[0])
 
-        print(finders)
-        print(filter)
+        #print(finders)
+        #print(filter)
 
 
 
@@ -239,8 +244,8 @@ class MyWindow(QWidget):
         fileName = self.model.fileName(indexItem)
         filePath = self.model.filePath(indexItem)
 
-        self.lineEditFileName.setText(fileName)
-        self.lineEditFilePath.setText(filePath)
+        #self.lineEditFileName.setText(fileName)
+        #self.lineEditFilePath.setText(filePath)
 
     def informer(self,dir_root,path_index):
 
