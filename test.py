@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QFileSystemModel, QTreeView, 
 class MyWindow(QWidget):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
-        self.dir = r'Z://DigitRock Models Backup/'
+        self.dir = r'Z:/DigitRock Models Backup/'
         self.pathRoot = self.dir
 
         self.interface()
@@ -250,7 +250,7 @@ class MyWindow(QWidget):
     def informer(self,dir_root,path_index):
 
             self.index_path = path_index.replace(dir_root,"")
-            if self.index_path.count('/') >= 2:
+            if self.index_path.count(r'/') >= 2:
                 self.lvl1,self.lvl2,self.lvl3 = self.index_path.split("/")[0],self.index_path.split("/")[1],self.index_path.split("/")[2]
                 self.line2.setText(self.lvl1)
                 self.line3.setText(self.lvl2)
